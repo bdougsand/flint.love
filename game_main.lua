@@ -7,31 +7,40 @@ function game.reloaded()
 end
 
 function game.update(dt, state)
-  local x = 0
-  local y = 0
-  local mod = 1
-  if love.keyboard.isDown("left") then
-    x = -1
-  elseif love.keyboard.isDown("right") then
-    x = 1
-  end
+end
 
-  if love.keyboard.isDown("up") then
-    y = -1
-  elseif love.keyboard.isDown("down") then
-    y = 1
+function game.update_input(state)
+  for k, v in pairs(state.input) do
+    state.input[k] = v + 1
   end
+end
 
-  if love.keyboard.isDown("lshift") then
-    mod = 2
+function game.update_entities(dt, state)
+  local tick_rate = state.tick_rate or 1
+  state.tick = state.tick + tick_rate
+  for i, entity in ipairs(state.entities) do
+    -- Maybe I'll use this?
+    entity.tick = entity.tick + ((entity.tick_rate or 1) * tick_rate)
+
+    -- Run behaviors on all entities:
+    for j, behave in ipairs(entity.behaviors) do
+      behave(entity, state.tick, dt)
+      -- TODO: Prioritizing behaviors?
+    end
   end
-
-  entity.move(state.player, mod*x, mod*y)
 end
 
 function game.draw(state)
   entity.draw(state.player)
-  --love.graphics.rectangle("fill", state.player.x, 10, 100, 100)
+  love.graphics.print("Hello, world")
+end
+
+function game.keypressed(state, code)
+  state.input[code] = 0
+end
+
+function game.keyreleased(state, code)
+  state.input[code] = nil
 end
 
 return game

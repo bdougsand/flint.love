@@ -1,0 +1,3 @@
+local thingy = {}
+
+return thingy

@@ -5,9 +5,11 @@ function entity.draw(entity)
     local c = entity.color
     love.graphics.setColor(c[1], c[2], c[3], c[4])
   end
-  love.graphics.rectangle("fill",
-                          entity.x, entity.y,
+  love.graphics.push()
+  love.graphics.translate(entity.x, entity.y)
+  love.graphics.rectangle("fill", 0, 0,
                           entity.width, entity.height)
+  love.graphics.pop()
 end
 
 function entity.move(entity, x, y)
